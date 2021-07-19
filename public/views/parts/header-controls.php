@@ -1,7 +1,7 @@
 <div class="buttons-top">
   <div class="left-button">
     <div class= "room-title">
-      <?php wp_title(); ?> | <span id="count-users">1</span> <i id="count-users-icon" class="fas fa-users"></i>
+      <?php if(isset($page_title)) { echo $page_title; } else { wp_title(); } ?> | <span id="count-users">1</span> <i id="count-users-icon" class="fas fa-users"></i>
     </div>
   </div>
   <div class="right-buttons">

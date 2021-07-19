@@ -290,4 +290,21 @@
 .multiple-speaker-views {  width: 20%;  }
 .dragable-speaker-main .current{border: 1px dashed #000!important;background: #c5e6fc;}
 .main-view,.multiple-speaker-views{border: 1px solid #c8c8c8;}
-/*-----------------draggabl settings end----------------------------------*/
+/*-----------------draggable settings end----------------------------------*/
+
+.recording_layout_image_section{
+  float: left;
+  margin-left: 10px;
+}
+
+
+td.recordings.column-recordings > select, td.recordings.column-recordings > span {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+td.recordings.column-recordings {
+    display: flex;
+}
+
+

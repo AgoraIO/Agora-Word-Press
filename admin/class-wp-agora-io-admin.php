@@ -162,7 +162,7 @@ class WP_Agora_Admin {
     	'agora_channel_recording'
     );
 
-    // Chat metabox
+    // Custom Settings metabox
     add_meta_box(
     	'agora-form-chat',
     	__('Settings', 'agoraio'),
@@ -413,11 +413,27 @@ class WP_Agora_Admin {
 	// Admin styles for settings pages...
 	public function enqueue_styles() {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-agora-io-admin.css', array(), $this->version, 'all' );
+
+		/* jQuery UI drag-drop CSS */
+		wp_enqueue_style( $this->plugin_name.'-drag-drop-custom-css', plugin_dir_url( __FILE__ ) . 'css/wp-agora-io-drag-drop.css', $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name.'-jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', $this->version, 'all' );
+
 	}
 
 	// Admin scripts for ajax requests on settings pages...
 	public function enqueue_scripts() {
+		
+		$recordings_regions = WP_Agora_Public::$recordings_regions;
+		?>
+		<script> 
+			var plugineBaseURL = "<?php echo plugins_url('wp-agora-io'); ?>";
+			var cloudRegions = '<?php print_r(json_encode($recordings_regions)); ?>'; 
+		</script>
+		<?php 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-agora-io-admin.js', array( 'jquery' ), $this->version, false );
+
+		/* jQuery UI drag-drop JS */
+		wp_enqueue_script( $this->plugin_name.'-jquery-ui', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array( 'jquery' ), $this->version, false );
 	}
 
 }

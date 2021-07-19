@@ -1,12 +1,20 @@
-<div class="fabs">
+<div class="<?php if(isset($channelSettings['type']) && $channelSettings['type'] == 'communication'){ echo 'communication-raise-hand-btn'; } else { echo 'fabs raise-hand-icon-fabs'; } ?>"
+style="<?php if(!isset($channelSettings['type']) || $channelSettings['type'] != 'communication'){ echo 'display: none;'; } ?>"
+>
+<!-- Hide Raise Hand Icon by defeault for audience mode in boradcast channel type -->
+
 	<div class="raise-hand-icon" id="raiseHand">
-        <i class="far fa-hand-paper"></i>
+        <button class="btnIcon"><i class="far fa-hand-paper" title="Raise Hand"></i></button>
     </div>
 </div>
 
 <script type="text/javascript">
+    jQuery(document).ready(function(){
+        showRaiseHandInCommunication();
+    });
+
 	window.addEventListener('agora.rtm_init', function loadChatApp() {
-        if(window.agoraMode == 'audience'){
+        if(window.agoraMode == 'audience' ||  window.agoraMode == 'communication'){
         const headTag = document.head || document.getElementsByTagName("head")[0];
 
         const chatStyles = document.createElement("link");

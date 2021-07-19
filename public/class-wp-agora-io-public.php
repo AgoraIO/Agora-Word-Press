@@ -14,6 +14,8 @@ class WP_Agora_Public {
 	private $plugin_name;
 	public $version;
 
+	public static $recordings_regions = array();
+
 	private static $shortcodeRendered = array();
 
 	/**
@@ -24,10 +26,18 @@ class WP_Agora_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->settings = null;
+		
+		self::$recordings_regions['qiniu'] = ['East China', 'North China', 'South China', 'North America'];
+		self::$recordings_regions['aws'] = ['US_EAST_1', 'US_EAST_2', 'US_WEST_1', 'US_WEST_2', 'EU_WEST_1', 'EU_WEST_2', 'EU_WEST_3', 'EU_CENTRAL_1', 'AP_SOUTHEAST_1', 'AP_SOUTHEAST_2', 'AP_NORTHEAST_1', 'AP_NORTHEAST_2', 'SA_EAST_1', 'CA_CENTRAL_1', 'AP_SOUTH_1', 'CN_NORTH_1', 'CN_NORTHWEST_1', 'US_GOV_WEST_1'];
+		self::$recordings_regions['alibaba'] = ['CN_Hangzhou', 'CN_Shanghai', 'CN_Qingdao', 'CN_Beijing', 'CN_Zhangjiakou', 'CN_Huhehaote', 'CN_Shenzhen', 'CN_Hongkong', 'US_West_1', 'US_East_1', 'AP_Southeast_1', 'AP_Southeast_2', 'AP_Southeast_3', 'AP_Southeast_5', 'AP_Northeast_1', 'AP_South_1', 'EU_Central_1', 'EU_West_1', 'EU_East_1'];
+
+		//self::$recordings_regions = (object) self::$recordings_regions;
 
 		// Declaration of shortcodes and widgets
 		add_shortcode( 'agora-communication', array($this, 'agoraCommunicationShortcode') );
 		add_shortcode( 'agora-broadcast', array($this, 'agoraBroadcastShortcode') );
+
+		add_shortcode( 'agora-recordings', array($this, 'agoraRecordingsList') );
 
 		$this->settings = get_option($this->plugin_name);
 		if (!$this->settings) {
@@ -68,9 +78,15 @@ class WP_Agora_Public {
 	    add_action( 'wp_ajax_get_previous_chats', $getChatsAjax );
 	    add_action( 'wp_ajax_nopriv_get_previous_chats', $getChatsAjax );
 
+		/* Ajax to handle when a Raise hand Request is accepted in Broadcast channel */
 		$loadHostViewAjax = array($this, 'load_host_view');
 		add_action('wp_ajax_load_host_view', $loadHostViewAjax);
 		add_action('wp_ajax_nopriv_load_host_view', $loadHostViewAjax);
+
+		/* Ajax to handle when a user is above the mentioned hosts limit in communication channel */
+		$loadAudienceViewAjax = array($this, 'load_audience_view');
+		add_action('wp_ajax_load_audience_view', $loadAudienceViewAjax);
+		add_action('wp_ajax_nopriv_load_audience_view', $loadAudienceViewAjax);
 
 	    // Page Template loader for FullScreen
 	    require_once plugin_dir_path(dirname( __FILE__ )) . 'public/class-wp-agora-page-template.php';
@@ -92,6 +108,8 @@ class WP_Agora_Public {
 	public function load_host_view(){
 		ob_start();
 
+		$page_title = sanitize_text_field($_POST['page_title']);
+
 		$channel_id = sanitize_text_field($_POST['channel_id']);
 		$channel = WP_Agora_Channel::get_instance($channel_id);
 		$agora = $this;
@@ -107,6 +125,27 @@ class WP_Agora_Public {
 		<?php
 
 		include(__DIR__.'/views/wp-agora-io-broadcast.php');
+		wp_die();
+	}
+
+	public function load_audience_view(){
+		ob_start();
+
+		$page_title = sanitize_text_field($_POST['page_title']);
+		$channel_id = sanitize_text_field($_POST['channel_id']);
+		$channel = WP_Agora_Channel::get_instance($channel_id);
+
+		$agora = $this;
+		$instance = $agora->getShortcodeAttrs('agora-communication', []);
+		$current_user = wp_get_current_user();
+		?>
+
+		<script>
+			window.roleFromHostToAudience = true;
+		</script>
+
+		<?php
+		include(__DIR__.'/views/wp-agora-io-audience.php');
 		wp_die();
 	}
 
@@ -132,7 +171,7 @@ class WP_Agora_Public {
 					$result->time = date("h:i a", $dateInLocalTimezone);
 				}
 				$result->isLocalMessage = false;
-				if((is_user_logged_in() && $chat->user_id == get_current_user_id()) || ($username==$result->username)){
+				if((is_user_logged_in() && $result->user_id == get_current_user_id()) || ($username==$result->username)){
 					$result->isLocalMessage = true;
 				}
 			}
@@ -322,6 +361,12 @@ class WP_Agora_Public {
 		return renderCommnicationShortcode( $this, $atts );
 	}
 
+	/**  Get Agora Recordings List Shortcode shortcode **/
+	public function agoraRecordingsList( $atts ){
+		require_once(__DIR__.'/views/wp-agora-io-recordings.php');
+		return getRecordingsList($atts);
+	}
+
 	/**  Render Agora Broadcast shortcode **/
 	public function agoraBroadcastShortcode( $atts ) {
 		require_once("shortcode-agora-broadcast.php");
@@ -409,6 +454,8 @@ class WP_Agora_Public {
 			}
 		}
 
+		wp_enqueue_script($this->plugin_name.'-hls-player-js', 'https://cdn.jsdelivr.net/npm/hls.js@latest', array( ), $this->version, false);
+
 		// add data before JS plugin
 		// useful to load dynamic settings and env vars
 		add_action( 'wp_footer', array($this, 'createPublicJSvars'), 1);
@@ -417,6 +464,7 @@ class WP_Agora_Public {
 		// Create public JS Variables to pass to external script
 	public function createPublicJSvars () {
 		$vars = 'var ajax_url="'.admin_url( 'admin-ajax.php' ).'";';
+		$vars.= 'var page_title="'.get_the_title().'";';
 
 		// append here more settings vars
 		

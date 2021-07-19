@@ -27,6 +27,7 @@ window.AGORA_BROADCAST_UI = {
     jQuery("#exit-btn").click(function(){
       console.log("so sad to see you leave the channel");
       window.AGORA_BROADCAST_CLIENT.agoraLeaveChannel(); 
+      sessionStorage.clear();
     });
 
     jQuery("#screen-share-btn").click(function() {
@@ -156,23 +157,36 @@ window.AGORA_BROADCAST_UI = {
     jQuery("#mic-icon").toggleClass('fa-microphone').toggleClass('fa-microphone-slash'); // toggle the mic icon
     if (jQuery("#mic-icon").hasClass('fa-microphone')) {
       window.localStreams.camera.stream.unmuteAudio(); // enable the local mic
+      if(canHandleStateOnRefresh()){
+        sessionStorage.setItem("muteAudio", "0"); //save value in session storage to maintain it's state on refresh
+      }
       window.AGORA_UTILS.toggleVisibility("#mute-overlay", false); // hide the muted mic icon
     } else {
       window.localStreams.camera.stream.muteAudio(); // mute the local mic
+      if(canHandleStateOnRefresh()){
+        sessionStorage.setItem("muteAudio", "1"); //save value in session storage to maintain it's state on refresh
+      }
       window.AGORA_UTILS.toggleVisibility("#mute-overlay", true); // show the muted mic icon
     }
   },
 
-  toggleVideo: function () {
-    if (window.localStreams.camera.stream) {
+    toggleVideo: function () {
+      if (window.localStreams.camera.stream) {
       window.AGORA_UTILS.toggleBtn(jQuery("#video-btn")); // toggle button colors
       window.AGORA_UTILS.toggleBtn(jQuery("#cam-dropdown"));
       if (jQuery("#video-icon").hasClass('fa-video')) {
         window.localStreams.camera.stream.muteVideo(); // enable the local video
+        if(canHandleStateOnRefresh()){
+          sessionStorage.setItem("muteVideo", "1"); //save value in session storage to maintain it's state on refresh
+        }
+        handleMutedVideoBackgroundColor(window.localStreams.camera.stream.getId(), 'local');
         window.AGORA_UTILS.toggleVisibility("#no-local-video", true); // show the user icon when video is disabled
         // console.log("muteVideo");
       } else {
         window.localStreams.camera.stream.unmuteVideo(); // disable the local video
+        if(canHandleStateOnRefresh()){
+          sessionStorage.setItem("muteVideo", "0"); //save value in session storage to maintain it's state on refresh
+        }
         window.AGORA_UTILS.toggleVisibility("#no-local-video", false); // hide the user icon when video is enabled
         // console.log("unMuteVideo");
       }

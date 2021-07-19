@@ -33,15 +33,35 @@ function agoraio_admin_save_button( $channel_id ) {
 function agora_render_setting_row_select($id, $title, $options, $settings, $prefix=null) {
   $input_id = !empty($prefix) ? $prefix.'-'.$id : $id;
   ?>
-  <tr>
+  <tr id="<?php echo $id; ?>-row">
     <th scope="row"><label for="<?php echo $input_id ?>"><?php echo $title; ?></label></th>
     <td>
-      <select id="<?php echo $input_id ?>" name="<?php echo $input_id ?>">
-        <?php foreach ($options as $key => $value) {
+      <select id="<?php echo $input_id ?>" name="<?php echo $input_id ?>" style="<?php if($id == "recording_layout"){ echo "float:left;"; } ?>">
+        <?php 
+        //If no layout is selected default layout will be best fit
+        if($id == "recording_layout" && $settings[$input_id]==''){
+          $settings[$input_id] = 1;
+        }
+        foreach ($options as $key => $value) {
           $selected = ($settings[$input_id]==$key) ? 'selected="selected"' : '';
           echo '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
         } ?>
       </select>
+
+      <?php 
+      /* Add and show recording layout images with the option */
+      if($id == "recording_layout"){ 
+        $layoutImg = plugins_url('wp-agora-io')."/imgs/recordings/".$settings[$input_id]."-layout.png";
+        ?>
+        <div class="recording_layout_image_section">
+          <a href="<?php echo $layoutImg; ?>" target="_blank">
+            <div>
+              <img src="<?php echo $layoutImg; ?>" height="30" width="50">
+            </div>
+          </a>
+        </div>  
+      <?php } ?>
+
     </td>
   </tr>
   <?php
@@ -50,7 +70,7 @@ function agora_render_setting_row_select($id, $title, $options, $settings, $pref
 function agora_render_setting_row($id, $title, $settings, $prefix, $inputType="number") {
   $input_id = !empty($prefix) ? $prefix.'-'.$id : $id;
   ?>
-  <tr>
+  <tr id="<?php echo $id; ?>-row">
     <th scope="row"><label for="<?php echo $input_id ?>"><?php echo $title ?></label></th>
     <td>
       <input
@@ -406,7 +426,7 @@ function render_agoraio_channel_form_chat_support($channel) {
    ?>
     <?php agora_render_setting_row_select(
       'mute_all_users',
-      __('Mute all users?', 'agoraio'),
+      __('Mute all users Audio/Video?', 'agoraio'),
       array(
         '' => __('Select', 'agoraio'),
         1 => __('Yes', 'agoraio'),
@@ -415,7 +435,7 @@ function render_agoraio_channel_form_chat_support($channel) {
    ?>
     <?php agora_render_setting_row_select(
       'chat_history',
-      __('Enable Chat History?', 'agoraio'),
+      __('Save Chat History?', 'agoraio'),
       array(
         '' => __('Select', 'agoraio'),
         1 => __('Yes', 'agoraio'),
@@ -431,6 +451,39 @@ function render_agoraio_channel_form_chat_support($channel) {
         0 => __('No', 'agoraio')
       ), $props, '');
    ?>
+
+  <?php
+    $args = array('fields' => array( 'ID', 'display_name' ) );
+    $users = get_users($args);
+
+    $users_options = array(
+      '' => __('Select', 'agoraio')
+    );
+
+    foreach($users as $user){
+      $users_options[$user->ID] = __($user->display_name, 'agoraio');
+    }
+
+    agora_render_setting_row_select(
+    'admin_user',
+    __('Admin User', 'agoraio'),
+    $users_options, $props, '');
+  ?>
+
+  <?php agora_render_setting_row_select(
+      'admin_user_unmute_forcefully',
+      __('Can Admin user unmute Audio/Video forcefully?', 'agoraio'),
+      array(
+        '' => __('Select', 'agoraio'),
+        1 => __('Yes', 'agoraio'),
+        0 => __('No', 'agoraio')
+      ), $props, '');
+  ?>
+
+<?php 
+  agora_render_setting_row('max_host_users', __('Maximum No. of hosts (Excluding Broadcasters)', 'agoraio'), $props, '', 'text');    
+?>
+
   </table>
   <?php
 }
@@ -462,6 +515,23 @@ function render_agoraio_channel_form_recording($channel) {
       echo '<input type="hidden" id="region-tmp" value="'.$recording['region'].'" />';
     }
 
+    agora_render_setting_row_select(
+      'protoType',
+      __('Type', 'agoraio'),
+      array(
+        'composite' => __('Composite', 'agoraio'),
+        'individual' => __('Individual', 'agoraio')
+      ), $recording, '');
+
+    agora_render_setting_row_select(
+      'recording_layout',
+      __('Layout', 'agoraio'),
+      array(
+        1 => __('Best Fit', 'agoraio'),
+        0 => __('Floating', 'agoraio'),
+        2 => __('Vertical', 'agoraio')
+      ), $recording, '');   
+    
     agora_render_setting_row('bucket', __('Bucket', 'agoraio'), $recording, '', 'text');
 
     agora_render_setting_row('accessKey', __('Access Key', 'agoraio'), $recording, '', 'text');

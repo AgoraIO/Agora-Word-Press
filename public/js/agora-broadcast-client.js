@@ -142,6 +142,7 @@ async function createCameraStream(uid, deviceIds) {
     // window.AGORA_BROADCAST_UI.calculateVideoScreenSize();
     
     AgoraRTC.Logger.info('getUserMedia successfully');
+     jQuery(".main-screen-stream-section").css('display', 'block');
     localStream.play('full-screen-video'); // play the local stream on the main div
     // publish local stream
 
@@ -164,11 +165,22 @@ async function createCameraStream(uid, deviceIds) {
     
     /* Mute Audios and Videos Based on Mute All Users Settings */
     if(window.mute_all_users_audio_video){
-      if(localStream.getVideoTrack() && localStream.getVideoTrack().enabled){
+      /* Mute if video is there and user has not unmuted their video - on Refresh (through session storage) */
+      if((localStream.getVideoTrack() && localStream.getVideoTrack().enabled)  && (sessionStorage.getItem("muteVideo")!="0")){
           jQuery("#video-btn").trigger('click');
       }
-      if(localStream.getAudioTrack() && localStream.getAudioTrack().enabled){
+      /* Mute if audio is there and user has not unmuted their audio - on Refresh (through session storage) */
+      if((localStream.getAudioTrack() && localStream.getAudioTrack().enabled) && (sessionStorage.getItem("muteAudio")!="0")){
           jQuery("#mic-btn").trigger('click');
+      }
+    } else { /* Mute Audios and Videos Based on Mute All Users Settings- Disabled */
+      /* If user has muted audio on Refresh (Check through session storage value) */
+      if(sessionStorage.getItem("muteAudio")=="1"){
+        jQuery("#mic-btn").trigger('click');
+      }
+      /* If user has muted video on Refresh (Check through session storage value) */
+      if(sessionStorage.getItem("muteVideo")=="1"){
+        jQuery("#video-btn").trigger('click');
       }
     }
 

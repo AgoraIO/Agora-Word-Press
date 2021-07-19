@@ -1,11 +1,15 @@
-var cloudRegions = {
-	// North America in China?
-  'qiniu': ['East China', 'North China', 'South China', 'North America'],
+// var cloudRegions = {
+// 	// North America in China?
+//   'qiniu': ['East China', 'North China', 'South China', 'North America'],
 
-  'aws': ['US_EAST_1', 'US_EAST_2', 'US_WEST_1', 'US_WEST_2', 'EU_WEST_1', 'EU_WEST_2', 'EU_WEST_3', 'EU_CENTRAL_1', 'AP_SOUTHEAST_1', 'AP_SOUTHEAST_2', 'AP_NORTHEAST_1', 'AP_NORTHEAST_2', 'SA_EAST_1', 'CA_CENTRAL_1', 'AP_SOUTH_1', 'CN_NORTH_1', 'CN_NORTHWEST_1', 'US_GOV_WEST_1'],
+//   'aws': ['US_EAST_1', 'US_EAST_2', 'US_WEST_1', 'US_WEST_2', 'EU_WEST_1', 'EU_WEST_2', 'EU_WEST_3', 'EU_CENTRAL_1', 'AP_SOUTHEAST_1', 'AP_SOUTHEAST_2', 'AP_NORTHEAST_1', 'AP_NORTHEAST_2', 'SA_EAST_1', 'CA_CENTRAL_1', 'AP_SOUTH_1', 'CN_NORTH_1', 'CN_NORTHWEST_1', 'US_GOV_WEST_1'],
   
-  'alibaba': ['CN_Hangzhou', 'CN_Shanghai', 'CN_Qingdao', 'CN_Beijing', 'CN_Zhangjiakou', 'CN_Huhehaote', 'CN_Shenzhen', 'CN_Hongkong', 'US_West_1', 'US_East_1', 'AP_Southeast_1', 'AP_Southeast_2', 'AP_Southeast_3', 'AP_Southeast_5', 'AP_Northeast_1', 'AP_South_1', 'EU_Central_1', 'EU_West_1', 'EU_East_1'],
-};
+//   'alibaba': ['CN_Hangzhou', 'CN_Shanghai', 'CN_Qingdao', 'CN_Beijing', 'CN_Zhangjiakou', 'CN_Huhehaote', 'CN_Shenzhen', 'CN_Hongkong', 'US_West_1', 'US_East_1', 'AP_Southeast_1', 'AP_Southeast_2', 'AP_Southeast_3', 'AP_Southeast_5', 'AP_Northeast_1', 'AP_South_1', 'EU_Central_1', 'EU_West_1', 'EU_East_1'],
+// };
+
+cloudRegions = JSON.parse(cloudRegions);
+
+console.log("hlwcloudRegions", cloudRegions)
 
 function updateSettingValue(settingName, newValue, callback) {
 	var data = { action: 'save-agora-setting' };
@@ -248,6 +252,15 @@ function agoraChatChange() {
 	})
 }
 
+/* Function to update component's position through Drag-Drop Builder */
+function agoraComponentPositionChange(component, position) {
+	updateSettingValue(component, position, function(err, res) {
+		if (!res || !res.updated) {
+			// TODO: Show error?
+		}
+	})
+}
+
 function agoraChatChangeLoggedin() {
 	const enabled = document.querySelector('#agora-chat-check-loggedin').checked;
 	const box = document.querySelector('#chat-status-text-loggedin');
@@ -271,6 +284,13 @@ function agoraChatChangeLoggedin() {
 			$('.agora-color-picker').wpColorPicker();
 
 			$('#type').change(validateChannelType);
+
+			$('#protoType').change(validateRecordingType);
+
+			const protoType = $('#protoType').val();
+			if (protoType && protoType.length>0) {
+				$('#protoType').change();
+			}
 
 			const channelType = $('#type').val();
 			if (channelType && channelType.length>0) {
@@ -350,9 +370,9 @@ function agoraChatChangeLoggedin() {
 	function submitNewChannel(e) {
 		const channelType = $('#type').val();
 
-		if (channelType==='communication') {
-			return true;
-		}
+		// if (channelType==='communication') {
+		// 	return true;
+		// }
 
 		const users = [];
 		const usersRow = jQuery('#broadcast-users-list');
@@ -393,13 +413,16 @@ function agoraChatChangeLoggedin() {
 	function validateChannelType() {
 		var typeChannel = $(this).val();
 		var bhr = $('#broadcast-host-row');
+		var mxur = $('#max_host_users-row');
 		var linkTab2 = $('#link-tab-2');
 		var linkTab3 = $('#link-tab-3');
 		var splashImageURL = $('#splashImageURL').parent().parent();
 		var watchButtonText = $('#watchButtonText').parent().parent();
 		var watchButtonIcon = $('#watchButtonIcon').parent().parent();
 		if (typeChannel==='communication') {
-			bhr.hide();
+			//bhr.hide();
+			bhr.show();
+			mxur.show();
 			linkTab2.parent().hide();
 			linkTab3.parent().hide();
 			splashImageURL.hide();
@@ -407,6 +430,7 @@ function agoraChatChangeLoggedin() {
 			watchButtonIcon.hide();
 		} else {
 			bhr.show();
+			mxur.hide();
 			linkTab2.parent().show();
 			linkTab3.parent().show();
 			splashImageURL.show();
@@ -418,4 +442,31 @@ function agoraChatChangeLoggedin() {
 		// on communication, also hide Splash screen, and text and icon  button
 	}
 
+	function validateRecordingType() {
+		var recordingType = $(this).val();
+		var rlr = $('#recording_layout-row');
+		if (recordingType==='composite') {
+			rlr.show();
+		} else {
+			rlr.hide();
+		}
+		// on individual, hide the layout options
+	}
+
+	jQuery(document).on('change', 'select#recording_layout', function (e) {
+		const recLayout = jQuery(this).val();
+		const imgURL = plugineBaseURL+'/imgs/recordings/'+recLayout+'-layout.png';
+		jQuery("body tr#recording_layout-row .recording_layout_image_section a").attr('href', imgURL);
+		jQuery("body tr#recording_layout-row .recording_layout_image_section img").attr('src', imgURL);
+	});
+
 })( jQuery );
+
+function updateRecordingShortcode(recType, channel_id){
+
+	let shortcodeContent = '';
+	if(recType!=''){
+		shortcodeContent+=`<input type='text' onfocus='this.select();' readonly='readonly' value='[agora-recordings channel_id="${channel_id}" recording_type="${recType}"]' class='large-text code'>`
+	}
+	jQuery("body .recording-shortcode-row-"+channel_id).html(shortcodeContent);
+}

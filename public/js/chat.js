@@ -399,7 +399,7 @@
 	};
 
 	function addRemoteMsg(uidRTM, data) {
-		//if((isUserJoinedChat && window.chat_history_enabled) || !(window.chat_history_enabled)){
+		if((isUserJoinedChat && window.chat_history_enabled) || !(window.chat_history_enabled)){
 			let blocksMsg = data.split(TOKEN_SEP);
 			let msg  = blocksMsg[2];
 			let uid  = blocksMsg[0];
@@ -437,7 +437,7 @@
 			)	
 
 			chatMsgWindow.append(msgLine);
-		//}
+		}
 
 		if (chatRoot.hasClass('is-visible')){
 			scrollToBottm();

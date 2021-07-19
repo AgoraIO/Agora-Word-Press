@@ -286,84 +286,142 @@
            data-disabled="<?php _e('disabled', 'agoraio') ?>"></span>
         </div>
       </div>
-      
-      <div class="flex" id="agora-chat-position">
-        <div class="col label">
-          Position of Chat
-        </div>
-        <?php
-        $chatpositionvalue = isset($agora_options['agora-chat-position']) ? $agora_options['agora-chat-position'] : '';
-        
-        $options_array = array('Overlaid','Left','Right');
-        ?>
-        <div class="col value">
-          <select name="chat_position" id="agora-chat-position" class="NewSettingField">
-             <option value="">Select</option>
-            <?php foreach($options_array as $option){ 
-              $selected_not = '';
-              if($option == $chatpositionvalue){
-                $selected_not = 'selected="selected"';
-              }
-              ?>
-              <option <?php echo $selected_not; ?> value="<?php echo $option; ?>"><?php echo $option; ?></option>
-            <?php } ?>
-          </select>
-        </div>
-      </div>
 
-      <div class="flex" id="agora-chat-position">
-        <div class="col label">
-        Position of Speakers
-        </div>
-        <?php
-        $speakerpositionvalue = isset($agora_options['agora-speaker-position']) ? $agora_options['agora-speaker-position'] : '';
-        
-        $options_array = array('Top','Bottom','Left','Right');
-        ?>
-        <div class="col value">
-          <select name="speaker_position" id="agora-speaker-position" class="NewSettingField">
-             <option value="">Select</option>
-            <?php foreach($options_array as $option){ 
-              $selected_not = '';
-              if($option == $speakerpositionvalue){
-                $selected_not = 'selected="selected"';
-              }
-              ?>
-              <option <?php echo $selected_not; ?> value="<?php echo $option; ?>"><?php echo $option; ?></option>
-            <?php } ?>
-          </select>
-        </div>
-      </div>
     </div>
   </div>
-<div class="card ">
-<h2 class="title">Chat Settings</h2>
-    <br class="clear">
-<section class="dragable-chat-main">
 
-        <div class="left-side-main">
-              <div class="draggabble-box">
-              </div>
-        </div>
-        <div class="center-main">
-          <div class="overlay-main">            
-          </div>
-        </div>
-        <div class="right-side-main"></div>
-  </section>
+<?php /* Drag-drop */ ?>
+
+<?php 
+$chatPos = isset($agora_options['agora-chat-position']) ? strtolower($agora_options['agora-chat-position']) : '';
+$remoteSpeakersPos = isset($agora_options['agora-remote-speakers-position']) ? $agora_options['agora-remote-speakers-position'] : '';
+?>
+
+<div class="card">
+  <h2 class="title">Component's Position Settings</h2>
+
+  <div id="">
+      <table id="wp-aora-io-drag-drop" >
+          <tbody id="containment">
+              <tr class="wp-agora-io-drop-top-row">
+                  <td colspan="3" class="wp-agora-io-drop-top">
+                    <div class="wp-agora-io-drop">
+                      <?php if($remoteSpeakersPos == '' || $remoteSpeakersPos == 'top'){ ?>
+                        <div class="wp-agora-io-draggable remote-speakers-draggable">Remote Speakers</div>
+                      <?php } ?> 
+                      <?php if($chatPos == 'top'){ ?>
+                        <div class="wp-agora-io-draggable chat-draggable">Chat</div>
+                      <?php } ?> 
+                    </div>
+                  </td>
+              </tr>
+              <tr class="wp-agora-io-drop-middle-row">
+                  <td width="20%" class="wp-agora-io-drop-left">
+                    <div class="wp-agora-io-drop">
+                      <?php if($remoteSpeakersPos == 'left'){ ?>
+                        <div class="wp-agora-io-draggable remote-speakers-draggable">Remote Speakers</div>
+                      <?php } ?>
+                      <?php if($chatPos == 'left'){ ?>
+                        <div class="wp-agora-io-draggable chat-draggable">Chat</div>
+                      <?php } ?>
+                    </div>
+                  </td>
+                  <td width="60%" class="wp-agora-io-drop-overlaid">
+                    <div class="wp-agora-io-drop">
+                      <?php if($remoteSpeakersPos == 'overlaid'){ ?>
+                        <div class="wp-agora-io-draggable remote-speakers-draggable">Remote Speakers</div>
+                      <?php } ?>
+                      <?php if($chatPos == '' || $chatPos == 'overlaid'){ ?>
+                        <div class="wp-agora-io-draggable chat-draggable">Chat</div>
+                      <?php } ?>  
+                    </div>
+                  </td>
+                  <td width="20%" class="wp-agora-io-drop-right">
+                    <div class="wp-agora-io-drop">
+                      <?php if($remoteSpeakersPos == 'right'){ ?>
+                        <div class="wp-agora-io-draggable remote-speakers-draggable">Remote Speakers</div>
+                      <?php } ?>
+                      <?php if($chatPos == 'right'){ ?>
+                        <div class="wp-agora-io-draggable chat-draggable">Chat</div>
+                      <?php } ?>
+                    </div>
+                  </td>
+              </tr>
+              <tr class="wp-agora-io-drop-bottom-row">
+                  <td colspan="3" class="wp-agora-io-drop-bottom">
+                    <div class="wp-agora-io-drop">
+                      <?php if($remoteSpeakersPos == 'bottom'){ ?>
+                        <div class="wp-agora-io-draggable remote-speakers-draggable">Remote Speakers</div>
+                      <?php } ?>
+                      <?php if($chatPos == 'bottom'){ ?>
+                        <div class="wp-agora-io-draggable chat-draggable">Chat</div>
+                      <?php } ?>
+                    </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div><!-- /#page-wrapper -->
 </div>
 
-<div class="card ">
-    <h2 class="title">Speaker view Settings</h2>
-       <br class="clear">
-    <section class="dragable-speaker-main ">
-            <div class="main-view current"> </div>
-            <div class="multiple-speaker-views"> </div>
+<script>
+jQuery(document).ready(function() {
 
-    </section>
-</div>
+    let currentComponent = '';
 
+    jQuery(".wp-agora-io-draggable").draggable({ 
+        cursor: "crosshair", 
+        revert: "invalid",
+        drag: function(event, ui) {
+          if(jQuery(event.target).hasClass('remote-speakers-draggable')){
+            currentComponent = 'remoteSpeakers';
+          } else if(jQuery(event.target).hasClass('chat-draggable')){
+            currentComponent = 'chat';
+          }
+        }
+    });
 
+    jQuery(".wp-agora-io-drop").droppable({ 
+        accept: ".wp-agora-io-draggable", 
+        activeClass: "over",
+        drop: function(event, ui) {
+
+            jQuery(this).removeClass("border").removeClass("over");
+
+            /* Get drop position based on its class */
+            let position = jQuery(event.target).parents('td').attr('class').split('wp-agora-io-drop-')[1];
+
+            /* Update Remote Speaker position - If it's position is changed */
+            if(currentComponent == 'remoteSpeakers'){
+              agoraComponentPositionChange('agora-remote-speakers-position', position);
+            }
+
+            /* Update Chat position - If it's position is changed */
+            if(currentComponent == 'chat'){
+              agoraComponentPositionChange('agora-chat-position', position);
+            }
+
+            var dropped = ui.draggable;
+            var droppedOn = jQuery(this);
+            jQuery(dropped).detach().css({top: 0,left: 0}).appendTo(droppedOn);    
+        },
+        over: function(event, ui) {
+          // Enable all the .droppable elements
+          jQuery('.wp-agora-io-drop').droppable('enable');
+
+          let position = jQuery(this).parents('td').attr('class').split('wp-agora-io-drop-')[1];
+          // If the droppable element we're hovered over already contains a .draggable element, or if remote speakers position to be set as overlaid 
+          // don't allow another one to be dropped on it
+          //Remote Speakers position as overlaid does not make any sense, so ignore it. Also igored top position for chat
+          if((jQuery(this).has('.wp-agora-io-draggable').length) || (currentComponent == 'remoteSpeakers' && position == 'overlaid') || (currentComponent == 'chat' && position == 'top')) {
+            jQuery(this).droppable('disable');
+          }
+        }
+    });
+
+});
+</script>
+<?php /* Drag-drop */ ?>
 
   <script type="text/javascript">
     window.AGORA_ADMIN_URL = '<?php echo plugin_dir_url(__DIR__ . '/../index.php'); ?>';

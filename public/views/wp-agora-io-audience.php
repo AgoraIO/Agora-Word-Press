@@ -16,6 +16,8 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
   $screenStyles = "background-size:cover; background-image: url('".$settings['appearance']['noHostImageURL']."')";
 }
 
+$remoteSpeakersPos = isset($settingssettings['agora-remote-speakers-position']) ? $settings['agora-remote-speakers-position'] : '';
+
 // $user_avatar = get_avatar_data( $settings['host'], array('size' => 168) );
 ?>
 <div id="agora-root" class="agora agora-broadcast agora-audience">
@@ -25,7 +27,7 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
     <div class="agora-content">
       <?php require_once "parts/header-controls.php" ?>
 
-      <div id="screen-zone" class="screen" <?php echo $agoraStyle ?>>
+      <div id="screen-zone" class="screen agora-screen-users-<?php if($remoteSpeakersPos == '') { echo 'top'; } else { echo $remoteSpeakersPos; } ?>" <?php echo $agoraStyle ?>>
         <div id="screen-users" class="screen-users screen-users-1">
           <div id="full-screen-video" class="user" style="display: none; <?php echo $screenStyles; ?>"></div>
 
@@ -71,8 +73,22 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
     window.remoteStreams = {};
     var WAIT_FOR_RECONNECT_TIMEOUT = 15000; // 10 Seconds!
 
+    if(typeof window.roleFromHostToAudience!='undefined'){
+      handleOnLoad();
+    }
+    else{
+      window.addEventListener('load', function() {
+        /* Check if Raise Hand Request was accepted - on Refresh (using session storage) */
+        /* In joinAsHostApprovedUserId, there will be window.userId - that will be 0 for logged-out user, so skipping that as in logged out users every time, a new user id is generated */
+        if(sessionStorage.getItem("joinAsHostApprovedUserId")!=0 && sessionStorage.getItem("joinAsHostApprovedUserId") == window.userID){
+          joinAsHost();
+        } else {
+          handleOnLoad();
+        }
+      });
+    }
 
-    window.addEventListener('load', function() {
+    function handleOnLoad(){
       // set log level:
       // -- .DEBUG for dev 
       // -- .NONE for prod
@@ -90,7 +106,10 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
       const exitBtn = jQuery('#exit-btn')
       exitBtn.hide();
       exitBtn.click(function() {
-        Object.values(window.remoteStreams).forEach(stream => stream.close());
+        //Object.values(window.remoteStreams).forEach(stream => stream.close());
+        Object.keys(window.remoteStreams).forEach(function(key) {
+          window.remoteStreams[key].stream.close()
+        });
         window.remoteStreams = {};
         finishVideoScreen();
       })
@@ -157,6 +176,12 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
         const chatBtn = document.querySelector('#chatToggleBtn');
         if (chatBtn) {
           chatBtn.style.display = "block";
+        }
+
+        /*Hide Raise hand button in case if user joins as audience from communication channel due to users restriction limit */
+        const raiseHandIcon = document.querySelector(".raise-hand-icon-fabs");
+        if(sessionStorage.getItem("channelType") != 'communication'){
+          raiseHandIcon.style.display = "block";
         }
 
         jQuery("#watch-live-closed").hide();
@@ -242,6 +267,11 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
               chatBtn.style.display = "none";
             }
 
+            const raiseHandIcon = document.querySelector(".raise-hand-icon-fabs");
+            if (raiseHandIcon) {
+              raiseHandIcon.style.display = "none";
+            }
+
             finishVideoScreen();
           }
         }
@@ -286,37 +316,22 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
       }); 
 
       // Listener for Agora RTM Events
-      window.addEventListener('agora.rtmMessageFromPeer', async function receivePeerRTMMessage(evt) {
-        console.log("hlwPeerMsg Jai Shree Ram  Audeience")
-        if (evt.detail && evt.detail.text) {
+      //window.addEventListener('agora.rtmMessageFromPeer', receivePeerRTMMessage)
+    }
 
-          /* Handle Raise Hand Request - Response */
-
-          /* If Raise hand Request is Rejected */
-          if(evt.detail.text.indexOf('RAISE-HAND-REJECTED')===0){
-            console.log("Raise hand Request Rejected")
-            raiseHandRequestRejected();
-          } 
-
-          /* If Raise hand Request is Accepted */
-          else if(evt.detail.text.indexOf('RAISE-HAND-ACCEPTED')===0){
-            console.log("Raise hand Request Accepted")
-            // const fab_save_user_elm = document.getElementById('fab_save_user');
-            // console.log("hlwfab_save_userElement", fab_save_user_elm)
-            // fab_save_user_elm.removeEventListener('click',function(){
-            //   console.log("SavefabUser function has been removed")
-            // });
-            await agoraLeaveChannel();
-            joinAsHost();
-          }
-        }
-      })
-
-    });
+    window.AGORA_AUDIENCE = {
+      agoraLeaveChannel: agoraLeaveChannel,
+      raiseHandRequestRejected: raiseHandRequestRejected
+    };
 
     function raiseHandRequestRejected(){
-      alert("Your request is rejected");
+      //alert("Your request is rejected");
+      showToastMsg('Rejected', "Your raise hand request is rejected.");
+      jQuery("#cancelRaiseHand .hand-icon").attr("title", "Raise Hand");
       jQuery("#cancelRaiseHand").attr("id", "raiseHand");
+      if(canHandleStateOnRefresh()){
+        sessionStorage.removeItem("raisedHandReqUserId");
+      }
     }
 
     // join a channel
@@ -357,4 +372,7 @@ if (!empty($settings['appearance']['noHostImageURL'])) {
       });
     }
   </script>
+
+  <?php require_once "parts/toast.php" ?>
+
 </div>

@@ -54,6 +54,9 @@ window.AGORA_RTM_UTILS = {
 		})
 
 		window.rtmChannel.on('MemberLeft', memberId => {
+			if(window.isAdminUser){ //If current user is admin user and the peer leaves then update the raise hand requests object
+				removeRaiseHandReqContent(memberId);
+			}
 			updateUsersCount()
 		})
 
@@ -191,16 +194,19 @@ function processRtmRequest(value) {
 
 	    // in case the screen stream is already shown in the layout, it's needed to udpate the layout:
 	    if (window.remoteStreams[uid]) {
-	      // first remove the current screen stream from the normal users layout
-	      const screenStream = window.remoteStreams[uid];
-	      window.AGORA_UTILS.deleteRemoteStream(uid);
-	      screenStream.stop();
-	      
-	      const usersCount = Object.keys(window.remoteStreams).length + 1
-	      window.AGORA_UTILS.updateUsersCounter(usersCount);
+			/*Add Streams to large view if there is no stream that is pinned in large screen */
+			if(window.pinnedUser==''){
+				// first remove the current screen stream from the normal users layout
+				const screenStream = window.remoteStreams[uid].stream;
+				window.AGORA_UTILS.deleteRemoteStream(uid);
+				screenStream.stop();
+				
+				const usersCount = Object.keys(window.remoteStreams).length + 1
+				window.AGORA_UTILS.updateUsersCounter(usersCount);
 
-	      window.AGORA_SCREENSHARE_UTILS.addRemoteScreenshare(screenStream);
-	      window.screenshareClients[uid] = screenStream;
+				window.AGORA_SCREENSHARE_UTILS.addRemoteScreenshare(screenStream);
+				window.screenshareClients[uid] = screenStream;
+			}
 	  	}
 
 	  	return true;

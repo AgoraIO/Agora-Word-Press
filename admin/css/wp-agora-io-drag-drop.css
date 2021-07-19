@@ -1,0 +1,27 @@
+#wp-aora-io-drag-drop .over {
+    background-color: #c5e6fc;
+}
+#wp-aora-io-drag-drop td div {
+    width:auto;
+    height: 100%;
+}
+
+#wp-aora-io-drag-drop .wp-agora-io-draggable {
+    box-shadow: 0px 0px 0px 2px #8080808a;
+    text-align: center;
+}
+#wp-aora-io-drag-drop{
+    margin-top:50px;
+    width:100%;
+    border-collapse:collapse;
+    border: 1px solid black;
+}
+
+#wp-aora-io-drag-drop .wp-agora-io-drop-overlaid{
+    background-color: #c5e6fc;
+}
+
+#wp-aora-io-drag-drop td{
+    height:75px;
+    border: 1px solid black;
+}

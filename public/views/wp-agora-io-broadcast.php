@@ -3,6 +3,16 @@ $channelSettings    = $channel->get_properties();
 $videoSettings      = $channelSettings['settings'];
 $appearanceSettings = $channelSettings['appearance'];
 $current_user       = wp_get_current_user();
+$channel_layout = $channelSettings['channel_layout'];
+
+$remoteSpeakersPos = isset($agora->settings['agora-remote-speakers-position']) ? $agora->settings['agora-remote-speakers-position'] : '';
+
+/* Code with Reemote Streams on right side - use for future */
+// $isSpeakerView = false;
+// if($channel_layout == 'speaker'){
+//   $isSpeakerView = true;
+// }
+
 ?>
 <div id="agora-root" class="agora agora-broadcast">
       <?php /* if(is_array($recordingSettings) && 
@@ -21,13 +31,29 @@ $current_user       = wp_get_current_user();
       <div class="agora-content">
         <?php require_once "parts/header-controls.php" ?>
 
-        <div id="screen-zone" class="screen">
+        <div id="screen-zone" class="screen <?php //if($isSpeakerView){ echo 'speaker-view'; } ?> agora-screen-users-<?php if($remoteSpeakersPos == '') { echo 'top'; } else { echo $remoteSpeakersPos; } ?>">
+
+        <?php 
+        /* Code with Reemote Streams on right side - use for future */
+        /* if($isSpeakerView){ ?>
+          <div class="main-screen">
+            <div id="main-screen-stream-section" class="main-screen-stream-section">
+              <div id="full-screen-video" class="user">
+                <div id="mute-overlay" class="mute-overlay"><i class="fas fa-microphone-slash"></i></div>
+                <div id="no-local-video" class="no-video-overlay text-center"><i class="fas fa-user"></i></div>
+              </div>  
+            </div>
+          </div>
+        <?php } else { */ ?>
+
           <div id="screen-users" class="screen-users screen-users-1">
             <div id="full-screen-video" class="user">
               <div id="mute-overlay" class="mute-overlay"><i class="fas fa-microphone-slash"></i></div>
               <div id="no-local-video" class="no-video-overlay text-center"><i class="fas fa-user"></i></div>
             </div>
           </div>
+        <?php //} ?>
+
         </div>
       </div>
 

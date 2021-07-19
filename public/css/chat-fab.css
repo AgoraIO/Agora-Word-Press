@@ -1,23 +1,23 @@
 .agora .chat {
-	--remote-bgcolor: rgba(0, 0, 0, 0.06);
-	--local-bgcolor: #42a5f5;
+  --remote-bgcolor: rgba(0, 0, 0, 0.06);
+  --local-bgcolor: #42a5f5;
 
-	width: 100%;
-	font-size: 12px;
-	line-height: 22px;
-	font-weight: 500;
-	-webkit-font-smoothing: antialiased;
-	/* font-smoothing: antialiased; */
-	-webkit-transition: all .2s ease-out;
-	-webkit-transition: all .2s ease-in-out;
-	transition: all .2s ease-in-out;
+  width: 100%;
+  font-size: 12px;
+  line-height: 22px;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  /* font-smoothing: antialiased; */
+  -webkit-transition: all 0.2s ease-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .agora .fabs {
   width: 100%;
   margin: 0;
 }
 
-.agora-audience .fabs>.fab {
+.agora-audience .fabs > .fab {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -27,39 +27,39 @@
 }
 
 .agora .chat_header {
-	font-size: 14px;
-	font-weight: 600;
-	color: #f4f4f4;
-	padding: 8px 12px;
-	background: #a3a3a3;
-	border-top-left-radius: 3px;
-	border-top-right-radius: 3px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f4f4f4;
+  padding: 8px 12px;
+  background: #a3a3a3;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .agora .chat_header .right {
-  float:right;
+  float: right;
   cursor: pointer;
 }
 
 .agora .chat_fullscreen_loader {
-	display: none;
-	float: right;
-	cursor: pointer;
-	/* margin: 10px; */
-	font-size: 20px;
-	opacity: 0.5;
-	padding: 20px;
-	margin: -10px 10px;
+  display: none;
+  float: right;
+  cursor: pointer;
+  /* margin: 10px; */
+  font-size: 20px;
+  opacity: 0.5;
+  padding: 20px;
+  margin: -10px 10px;
 }
 
 .agora .chat.is-visible {
   display: block;
   opacity: 1;
-  -webkit-animation: chatZoomIn .2s cubic-bezier(.42, 0, .58, 1);
-  animation: chatZoomIn .2s cubic-bezier(.42, 0, .58, 1);
+  -webkit-animation: chatZoomIn 0.2s cubic-bezier(0.42, 0, 0.58, 1);
+  animation: chatZoomIn 0.2s cubic-bezier(0.42, 0, 0.58, 1);
 }
-.agora .is-hide{
-  opacity: 0
+.agora .is-hide {
+  opacity: 0;
 }
 
 .agora .chat_color {
@@ -72,17 +72,17 @@
 }
 
 .agora #chat-alert {
-	position: absolute;
-    top: -3px;
-    right: -2px;
-    font-size: 12px;
-    color: white;
-    transform: rotate(24deg);
-    box-shadow: 0px 2px 4px #585858;
-    background: #da4964;
-    padding: 4px;
-    border-radius: 50%;
-    transition: opacity ease 1s;
+  position: absolute;
+  top: -3px;
+  right: -2px;
+  font-size: 12px;
+  color: white;
+  transform: rotate(24deg);
+  box-shadow: 0px 2px 4px #585858;
+  background: #da4964;
+  padding: 4px;
+  border-radius: 50%;
+  transition: opacity ease 1s;
 }
 .agora.agora-audience #chat-alert {
   text-shadow: none;
@@ -95,21 +95,20 @@
 
   display: inline-block;
   text-align: center;
-    overflow-y: auto;
-
+  overflow-y: auto;
 }
-.agora #chat_body{
-    height: 450px;
+.agora #chat_body {
+  height: 450px;
 }
 .agora .chat_body li,
 .agora .chat_body p,
 .agora .chat_body a {
-    -webkit-animation: chatZoomIn .5s cubic-bezier(.42, 0, .58, 1);
-  animation: chatZoomIn .5s cubic-bezier(.42, 0, .58, 1);
+  -webkit-animation: chatZoomIn 0.5s cubic-bezier(0.42, 0, 0.58, 1);
+  animation: chatZoomIn 0.5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 .agora .chat_body p {
   padding: 20px;
-  color: #888
+  color: #888;
 }
 .agora .chat_body a {
   width: 10%;
@@ -137,51 +136,61 @@
 }
 
 .agora .fab_field.non-user {
-	display: block;
-    justify-content: center;
-    padding: 120px 15px;
+  /* display: block;
+  justify-content: center;
+  padding: 120px 15px; */
+  display: flex;
+  padding: 0 15px;
+  height: 250px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-.agora .fab_field.non-user label { width: 100%; }
-.agora .fab_field.non-user .error { color: #d94964; }
+.agora .fab_field.non-user label {
+  width: 100%;
+}
+.agora .fab_field.non-user .error {
+  color: #d94964;
+}
 .agora .fab_field.non-user .btnIcon {
   font-size: 13px;
-	margin-top: 10px;
+  margin-top: 10px;
   max-width: none;
 }
 .agora .fab_field.non-user .chat_enter_name {
-	font-size: 14px;
-	text-align: center;
-	border: 2px solid rgba(0, 0, 0, 0.085);
+  font-size: 14px;
+  text-align: center;
+  border: 2px solid rgba(0, 0, 0, 0.085);
 }
 
 .agora .chat-msg-line {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 .agora .chat-msg-line label {
-	flex: 100%;
-    margin-left: 11px;
-    color: #aaaaaa;
+  flex: 100%;
+  margin-left: 11px;
+  color: #aaaaaa;
 }
 .agora .chat-msg-line.local label {
-    text-align: right;
-    margin-right: 20px;
+  text-align: right;
+  margin-right: 20px;
 }
 .agora .chat-msg-line label time {
-	color: #bbc1d0;
-    font-size: 95%;
+  color: #bbc1d0;
+  font-size: 95%;
 }
 .agora .chat-msg-line:first-child {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 .agora .chat-msg-line.local {
-	justify-content: flex-end;
+  justify-content: flex-end;
 }
 .agora .chat-msg-line.chat-notify {
-    text-align: center;
-    display: block;
-    color: #a2a2a2;
-    font-weight: 600;
+  text-align: center;
+  display: block;
+  color: #a2a2a2;
+  font-weight: 600;
 }
 
 .agora .chat_field.chat_message {
@@ -193,57 +202,55 @@
   min-height: 30px;
   width: 80%;
 }
-.agora .chat_category{
+.agora .chat_category {
   text-align: left;
 }
 
-.agora .chat_category{
+.agora .chat_category {
   margin: 20px;
   background: var(--remote-bgcolor);
   padding: 10px;
 }
 
-.agora .chat_category ul li{
-    width: 80%;
-    height: 30px;
-    background: #fff;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-    border-radius: 3px;
-    border: 1px solid #e0e0e0;
-    font-size: 13px;
-    cursor: pointer;
-    line-height: 30px;
-    color: #888;
-    text-align: center;
+.agora .chat_category ul li {
+  width: 80%;
+  height: 30px;
+  background: #fff;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  font-size: 13px;
+  cursor: pointer;
+  line-height: 30px;
+  color: #888;
+  text-align: center;
 }
 
-.agora .chat_category li:hover{
-    background: #83c76d;
-    color: #fff;
+.agora .chat_category li:hover {
+  background: #83c76d;
+  color: #fff;
 }
-.agora .chat_category li.active{
-    background: #83c76d;
-    color: #fff;
+.agora .chat_category li.active {
+  background: #83c76d;
+  color: #fff;
 }
 
-
-.agora .tags{
- margin: 20px;
-    bottom: 0px;
-    display: block;
-    width: 120%
+.agora .tags {
+  margin: 20px;
+  bottom: 0px;
+  display: block;
+  width: 120%;
 }
-.agora .tags li{
-    padding: 5px 10px;
-    border-radius: 40px;
-    border: 1px solid rgb(3, 117, 208);
-    margin: 5px;
-    display: inline-block;
-    color: rgb(3, 117, 208);
-    cursor: pointer;
-
+.agora .tags li {
+  padding: 5px 10px;
+  border-radius: 40px;
+  border: 1px solid rgb(3, 117, 208);
+  margin: 5px;
+  display: inline-block;
+  color: rgb(3, 117, 208);
+  cursor: pointer;
 }
 .agora .fab_field {
   width: 100%;
@@ -258,7 +265,7 @@
   position: absolute;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
-      z-index: 999;
+  z-index: 999;
 }
 
 .agora .fab_field a {
@@ -272,7 +279,7 @@
 } */
 
 .agora #fab_send {
-  float: right; 
+  float: right;
   background: rgba(0, 0, 0, 0);
 }
 
@@ -283,27 +290,27 @@
   margin: 5px;
 }
 
-.agora .fab_field .fab>i {
+.agora .fab_field .fab > i {
   font-size: 1.6em;
   line-height: 35px;
   color: #bbb;
 }
-.agora .fab_field .fab>i:hover {
+.agora .fab_field .fab > i:hover {
   color: var(--local-bgcolor);
 }
 
-
 .agora .chat_converse {
   position: relative;
-    background: #fff;
-    margin: 0;
-    height: 300px;
-    min-height: 0;
-    font-size: 12px;
-    line-height: 18px;
-    overflow-y: auto;
-    width: 100%;
-    padding-bottom: 5px;
+  background: #fff;
+  margin: 0;
+  /* height: 300px; */
+  height: 200px;
+  min-height: 0;
+  font-size: 12px;
+  line-height: 18px;
+  overflow-y: auto;
+  width: 100%;
+  padding-bottom: 5px;
 }
 
 .agora .chat_list {
@@ -325,40 +332,49 @@
   display: block;
   word-wrap: break-word;
   border-radius: 3px;
-  -webkit-animation: chatZoomIn .5s cubic-bezier(.42, 0, .58, 1);
-  animation: chatZoomIn .5s cubic-bezier(.42, 0, .58, 1);
+  -webkit-animation: chatZoomIn 0.5s cubic-bezier(0.42, 0, 0.58, 1);
+  animation: chatZoomIn 0.5s cubic-bezier(0.42, 0, 0.58, 1);
   clear: both;
   z-index: 999;
 }
 .agora .status {
-    margin: 45px -50px 0 0;
-    float: right;
-    font-size: 11px;
-    opacity: 0.3;
+  margin: 45px -50px 0 0;
+  float: right;
+  font-size: 11px;
+  opacity: 0.3;
 }
 .agora .status2 {
-    margin: -10px 20px 0 0;
-    float: right;
-    display: block;
-    font-size: 11px;
-    opacity: 0.3;
+  margin: -10px 20px 0 0;
+  float: right;
+  display: block;
+  font-size: 11px;
+  opacity: 0.3;
 }
 .agora .chat .chat_converse .chat_msg_item .chat_avatar {
   position: absolute;
   top: 0;
 }
 
-.agora .chat .chat_converse .chat_msg_item.chat_msg_item_remote_user .chat_avatar {
+.agora
+  .chat
+  .chat_converse
+  .chat_msg_item.chat_msg_item_remote_user
+  .chat_avatar {
   left: -48px;
   background: var(--remote-bgcolor);
 }
 
-.agora .chat .chat_converse .chat_msg_item.chat_msg_item_local_user .chat_avatar {
+.agora
+  .chat
+  .chat_converse
+  .chat_msg_item.chat_msg_item_local_user
+  .chat_avatar {
   right: -52px;
   background: rgba(0, 0, 0, 0.6);
 }
 
-.agora .chat .chat_converse .chat_msg_item .chat_avatar, .chat_avatar img{
+.agora .chat .chat_converse .chat_msg_item .chat_avatar,
+.chat_avatar img {
   width: 35px;
   height: 35px;
   text-align: center;
@@ -366,7 +382,7 @@
 }
 
 .agora .chat .chat_converse .chat_msg_item.chat_msg_item_remote_user {
-  margin-left: 	56px;
+  margin-left: 56px;
   background: var(--remote-bgcolor);
   color: #666;
 }
@@ -379,7 +395,7 @@
 }
 
 .agora .chat .chat_converse .chat_msg_item.chat_msg_item_remote_user:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 15px;
   left: -12px;
@@ -388,10 +404,10 @@
   border-right-color: var(--remote-bgcolor);
 }
 
-.agora .chat_form .get-notified label{
-    color: #077ad6;
-    font-weight: 600;
-    font-size: 11px;
+.agora .chat_form .get-notified label {
+  color: #077ad6;
+  font-weight: 600;
+  font-size: 11px;
 }
 
 .agora .chat input {
@@ -415,26 +431,26 @@
   border: 1px solid #83c76d;
 }
 .agora .chat_form .get-notified i {
-    background: #83c76d;
-    width: 30px;
-    height: 32px;
-    font-size: 18px;
-    color: #fff;
-    line-height: 30px;
-    font-weight: 600;
-    text-align: center;
-    margin: 2px 0 0 -30px;
-    position: absolute;
-    border-radius: 3px;
+  background: #83c76d;
+  width: 30px;
+  height: 32px;
+  font-size: 18px;
+  color: #fff;
+  line-height: 30px;
+  font-weight: 600;
+  text-align: center;
+  margin: 2px 0 0 -30px;
+  position: absolute;
+  border-radius: 3px;
 }
 .agora .chat_form .message_form {
   margin: 10px 0 0 0;
 }
-.agora .chat_form .message_form input{
+.agora .chat_form .message_form input {
   margin: 5px 0 5px 0;
   border: 1px solid #e0e0e0;
 }
-.agora .chat_form .message_form textarea{
+.agora .chat_form .message_form textarea {
   margin: 5px 0 5px 0;
   border: 1px solid #e0e0e0;
   position: relative;
@@ -452,25 +468,25 @@
   padding: 5px;
   border-radius: 3px;
 }
-.agora .chat_form .message_form button{
-    margin: 5px 0 5px 0;
-    border: 1px solid #e0e0e0;
-    position: relative;
-    width: 95%;
-    font-size: 12px;
-    line-height: 20px;
-    font-weight: 500;
-    color: #fff;
-    -webkit-font-smoothing: antialiased;
-    /* font-smoothing: antialiased; */
-    outline: none;
-    background: #fff;
-    display: inline-block;
-    resize: none;
-    padding: 5px;
-    border-radius: 3px;
-    background: #83c76d;
-    cursor: pointer;
+.agora .chat_form .message_form button {
+  margin: 5px 0 5px 0;
+  border: 1px solid #e0e0e0;
+  position: relative;
+  width: 95%;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  /* font-smoothing: antialiased; */
+  outline: none;
+  background: #fff;
+  display: inline-block;
+  resize: none;
+  padding: 5px;
+  border-radius: 3px;
+  background: #83c76d;
+  cursor: pointer;
 }
 .agora strong.chat_time {
   padding: 0 1px 1px 0;
@@ -504,13 +520,13 @@
 }
 
 .agora .is-float {
-  box-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 6px 12px rgba(0, 0, 0, .32);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 6px 12px rgba(0, 0, 0, 0.32);
 }
 
 .agora .is-loading {
   display: block;
-  -webkit-animation: loadChat 1s cubic-bezier(0, .99, 1, 0.6) infinite;
-  animation: loadChat 1s cubic-bezier(0, .99, 1, 0.6) infinite;
+  -webkit-animation: loadChat 1s cubic-bezier(0, 0.99, 1, 0.6) infinite;
+  animation: loadChat 1s cubic-bezier(0, 0.99, 1, 0.6) infinite;
 }
 /*Animation*/
 
@@ -518,7 +534,7 @@
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
-    opacity: 0.0;
+    opacity: 0;
   }
   100% {
     -webkit-transform: scale(1);
@@ -531,7 +547,7 @@
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
-    opacity: 0.0;
+    opacity: 0;
   }
   100% {
     -webkit-transform: scale(1);
@@ -544,7 +560,7 @@
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
-    opacity: 0.0;
+    opacity: 0;
   }
   50% {
     -webkit-transform: scale(1.5);
@@ -562,7 +578,7 @@
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
-    opacity: 0.0;
+    opacity: 0;
   }
   50% {
     -webkit-transform: scale(1.5);
@@ -580,8 +596,8 @@
 /* SMARTPHONES LANDSCAPE */
 @media only screen and (min-width: 480px) {
   .agora .fabs {
-    width: auto;
-    margin: 1em;
+    /* width: auto; 
+    margin: 1em;*/
   }
   .agora .chat {
     width: 300px;
@@ -614,49 +630,97 @@
   -ms-transform: scale(0);
   /* webkit-transform: scale(0); */
   -webkit-transform: scale(0);
-          transform: scale(0);
+  transform: scale(0);
 }
 /*animation effect*/
 
 .agora .ink.animate {
   -webkit-animation: chatRipple 0.5s ease-in-out;
-          animation: chatRipple 0.5s ease-in-out;
+  animation: chatRipple 0.5s ease-in-out;
 }
 
 @-webkit-keyframes chatRipple {
   /*scale the element to 250% to safely cover the entire link and fade it out*/
-  
+
   100% {
     opacity: 0;
     -moz-transform: scale(5);
     -ms-transform: scale(5);
     webkit-transform: scale(5);
     -webkit-transform: scale(5);
-            transform: scale(5);
+    transform: scale(5);
   }
 }
 
 @keyframes chatRipple {
   /*scale the element to 250% to safely cover the entire link and fade it out*/
-  
+
   100% {
     opacity: 0;
     -moz-transform: scale(5);
     -ms-transform: scale(5);
     webkit-transform: scale(5);
     -webkit-transform: scale(5);
-            transform: scale(5);
+    transform: scale(5);
   }
 }
-.agora .chat ::-webkit-input-placeholder { /* Chrome */
+.agora .chat ::-webkit-input-placeholder {
+  /* Chrome */
   color: #bbb;
 }
-.agora .chat :-ms-input-placeholder { /* IE 10+ */
+.agora .chat :-ms-input-placeholder {
+  /* IE 10+ */
   color: #bbb;
 }
-.agora .chat ::-moz-placeholder { /* Firefox 19+ */
+.agora .chat ::-moz-placeholder {
+  /* Firefox 19+ */
   color: #bbb;
 }
-.agora .chat :-moz-placeholder { /* Firefox 4 - 18 */
+.agora .chat :-moz-placeholder {
+  /* Firefox 4 - 18 */
   color: #bbb;
+}
+/* chat position right */
+.fabs.fabs-chat-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+  margin: 0;
+  /* height: 100%; */
+  position: absolute;
+  left: auto;
+  width: auto;
+}
+
+/* chat position left */
+.fabs.fabs-chat-left {
+  right: auto;
+  left: 0 !important;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+  margin: 0;
+  /* height: 100%; */
+  position: absolute;
+  left: auto;
+  width: auto;
+}
+
+/* chat position bottom */
+.fabs.fabs-chat-bottom {
+  width: auto;
+}
+
+/* chat position for audience */
+.chat_position {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  background: rgba(0, 0, 0, 0.5);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
